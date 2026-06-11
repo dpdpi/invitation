@@ -13,7 +13,7 @@
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
 <title>청첩장</title>
 
@@ -58,7 +58,7 @@ body {
   line-height: 1.85;
   overflow-x: hidden;
   letter-spacing: -0.01em;
-  padding-bottom: 96px;
+  /* bottom-bar 제거로 padding-bottom 불필요 */
 }
 
 ::-webkit-scrollbar { width: 5px; }
@@ -77,7 +77,7 @@ body {
 
 .section-label {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.22em;
   color: var(--gold);
@@ -197,12 +197,15 @@ body {
    ============================================ */
 #hero {
   position: relative;
-  height: 100svh;
-  min-height: 680px;
+  /* 모바일 청첩장 세로 비율 3:4 — 화면 너비 기준 */
+  width: 100%;
+  aspect-ratio: 3 / 5.3;
+  max-height: 92svh;   /* 너무 긴 태블릿/PC 방지 */
+  min-height: 480px;
   overflow: hidden;
   display: flex; flex-direction: column;
   align-items: center; justify-content: flex-end;
-  padding: 0 26px 92px;
+  padding: 0 26px 72px;
   background: #111;
 }
 
@@ -214,79 +217,114 @@ body {
   transform: scale(1.04);
   animation: hero-zoom 8s ease forwards;
 }
-.hero-bg::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.02) 0%,
-    rgba(0,0,0,0.10) 42%,
-    rgba(0,0,0,0.72) 100%
-  );
-}
 
 @keyframes hero-zoom { from{transform:scale(1.04)} to{transform:scale(1)} }
 
+/* ============================================
+   히어로 오버레이 텍스트 (참고 이미지 스타일)
+   ============================================ */
+
+/* 전체 컨텐츠 — 세로 전체를 채우며 상하 배치 */
 .hero-content {
-  position: relative; z-index: 1;
-  text-align: center;
-  animation: fade-up 1.2s ease 0.5s both;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 25px 28px 52px;
+  animation: fade-up 1.0s ease 0.3s both;
 }
 
-.hero-en-names {
+/* ── 상단 라벨 (Date / 요일 시간) ── */
+.hero-top {
+  text-align: center;
+}
+.hero-label {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  display: block;
+}
+.hero-dow-time {
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.90);
+  display: block;
+}
+
+/* ── 중앙 날짜 숫자 ── */
+.hero-center {
+  text-align: center;
+}
+.hero-month-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(88px, 22vw, 130px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 0.6;
+  display: block;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.22);
+  letter-spacing: -0.02em;
+}
+.hero-day-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(88px, 22vw, 130px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 0.92;
+  display: block;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.22);
+  letter-spacing: -0.02em;
+}
+.hero-wedding-tag {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.28em;
   color: rgba(255,255,255,0.82);
   text-transform: uppercase;
-  margin-bottom: 18px;
+  display: block;
+  margin-top: 10px;
 }
 
-.hero-ampersand {
-  font-family: var(--font-serif-en);
-  font-size: 92px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.18);
-  line-height: 1;
-  position: absolute;
-  left: 50%; top: -140px;
-  transform: translateX(-50%);
+/* ── 하단 이름 ── */
+.hero-bottom {
+  text-align: center;
+  position:absolute;
+  bottom:75px;
 }
-
 .hero-kr-names {
   font-family: var(--font-serif-kr);
-  font-size: 42px;
+  font-size: clamp(22px, 6vw, 30px);
   font-weight: 500;
   color: #fff;
-  letter-spacing: 0.08em;
-  margin-bottom: 28px;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.28);
-}
-
-.hero-date {
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.12em;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.30);
+  display: block;
 }
 
 .hero-scroll-hint {
-  position: absolute; bottom: 28px; left: 50%;
+  position: absolute; bottom: 20px; left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 3;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.68);
+  color: rgba(255,255,255,0.50);
   animation: bounce 2s ease-in-out infinite;
 }
 .hero-scroll-hint::after {
   content: '';
-  width: 1px; height: 36px;
-  background: rgba(255,255,255,0.4);
+  width: 1px; height: 28px;
+  background: rgba(255,255,255,0.3);
 }
 @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
 
@@ -303,7 +341,7 @@ body {
   font-size: 18px;
   font-weight: 400;
   color: var(--text-mid);
-  line-height: 2.35;
+  line-height: 1.6;
   white-space: pre-line;
   letter-spacing: -0.02em;
 }
@@ -322,7 +360,7 @@ body {
   align-items: start;
   background: #fff;
   border: 1px solid var(--divider);
-  border-radius: 24px;
+  border-radius: 5px;
   padding: 34px 22px;
   box-shadow: var(--shadow);
 }
@@ -331,8 +369,8 @@ body {
 
 .couple-role {
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.18em;
   color: var(--gold);
   text-transform: uppercase;
@@ -341,8 +379,8 @@ body {
 
 .couple-name {
   font-family: var(--font-serif-kr);
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   color: var(--text-dark);
   margin-bottom: 12px;
   letter-spacing: -0.03em;
@@ -360,7 +398,6 @@ body {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding-top: 34px;
-  gap: 8px;
 }
 .couple-divider span {
   font-family: var(--font-serif-en);
@@ -1046,6 +1083,43 @@ body {
 }
 
 /* ============================================
+   참석여부 (RSVP)
+   ============================================ */
+#rsvp {
+  background: var(--ivory);
+  text-align: center;
+}
+
+.rsvp-card {
+  background: #fff;
+  border: 1px solid var(--divider);
+  border-radius: 24px;
+  padding: 40px 28px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.rsvp-desc {
+  font-family: var(--font-serif-kr);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text-mid);
+  line-height: 2;
+  letter-spacing: -0.02em;
+}
+
+.rsvp-btn {
+  width: 100%;
+  min-height: 58px;
+  font-size: 17px;
+  border-radius: 16px;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================
    방명록
    ============================================ */
 #guestbook {
@@ -1262,29 +1336,6 @@ body {
 /* ============================================
    하단 고정 버튼
    ============================================ */
-#bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 560px;
-  background: rgba(255,255,255,0.94);
-  backdrop-filter: blur(14px);
-  border-top: 1px solid var(--divider);
-  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 12px;
-  z-index: 100;
-  box-sizing: border-box;
-}
-#bottom-bar .btn {
-  flex: 1;
-  min-height: 52px;
-  font-size: 15px;
-  padding: 14px 10px;
-}
-
 /* ============================================
    공유 섹션
    ============================================ */
@@ -1319,7 +1370,7 @@ footer {
    ============================================ */
 #toast {
   position: fixed;
-  bottom: 104px; left: 50%;
+  bottom: 32px; left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--text-dark);
   color: #fff;
@@ -1361,20 +1412,19 @@ footer {
    모바일 세부 보정
    ============================================ */
 @media (max-width: 480px) {
-  .section { max-width: 100%; padding: 92px 22px; }
+  .section { max-width: 100%; padding: 92px 15px; }
   .section-title { font-size: 27px; }
-  #hero { min-height: 680px; padding-bottom: 90px; }
-  .hero-kr-names { font-size: 40px; }
-  .hero-en-names, .hero-date { font-size: 15px; }
-  .invite-text { font-size: 18px; }
+  #hero { min-height: 460px; padding-bottom: 60px; }
+  .hero-kr-names { font-size: clamp(18px, 5vw, 24px); }
+  .hero-month-num, .hero-day-num { font-size: clamp(76px, 20vw, 110px); }
+  .invite-text { font-size: 15px; }
   .couple-grid { padding: 32px 18px; gap: 0 14px; }
-  .couple-name { font-size: 24px; }
+  .couple-name { font-size: 15px; }
   .couple-parents { font-size: 14px; }
   .wedding-date-slash { font-size: 80px; }
   .wedding-date-sub { font-size: 18px; }
   .location-btns { flex-direction: column; }
   .location-btns .btn { width: 100%; }
-  #bottom-bar { max-width: 100%; }
   .lightbox-slide { padding: 16px 52px; }
   .lightbox-arrow { width: 40px; height: 40px; font-size: 18px; }
   .lightbox-arrow.prev { left: 8px; }
@@ -1501,12 +1551,27 @@ footer {
 <!-- 1. HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
+
   <div class="hero-content">
-    <div class="hero-ampersand">&amp;</div>
-    <p class="hero-en-names" id="hero-en-names">GILDONG &amp; YOUNGHEE</p>
-    <h1 class="hero-kr-names" id="hero-kr-names">홍길동 · 김영희</h1>
-    <p class="hero-date" id="hero-date">2025 . 06 . 21</p>
+    <!-- 상단: Date 라벨 + 요일·시간 -->
+    <div class="hero-top">
+      <span class="hero-label">Date</span>
+      <span class="hero-dow-time" id="hero-dow-time">Saturday  2:00 pm</span>
+    </div>
+
+    <!-- 중앙: 월 / 일 큰 숫자 + Our Wedding Day -->
+    <div class="hero-center">
+      <span class="hero-month-num" id="hero-month-num">6</span>
+      <span class="hero-day-num"   id="hero-day-num">21</span>
+      <span class="hero-wedding-tag">Our Wedding Day</span>
+    </div>
+
+    <!-- 하단: 신랑 · 신부 이름 -->
+    <div class="hero-bottom">
+      <span class="hero-kr-names" id="hero-kr-names">홍길동 · 김영희</span>
+    </div>
   </div>
+
   <div class="hero-scroll-hint">scroll</div>
 </section>
 
@@ -1745,6 +1810,21 @@ footer {
 </section>
 
 <!-- 9. 방명록 -->
+<!-- 9. 참석여부 -->
+<section id="rsvp" class="section reveal">
+  <span class="section-label">RSVP</span>
+  <div class="section-title">참석 여부 전달</div>
+  <div class="divider"><div class="divider-diamond"></div></div>
+
+  <div class="rsvp-card">
+    <p class="rsvp-desc">참석 여부를 미리 알려주시면<br>더욱 감사하겠습니다.</p>
+    <button class="btn btn-gold rsvp-btn" onclick="openAttendModal()">
+      ✉ 참석 여부 전달하기
+    </button>
+  </div>
+</section>
+
+<!-- 10. 방명록 -->
 <section id="guestbook" class="section reveal">
   <span class="section-label">Guestbook</span>
   <div class="section-title">축하 메시지</div>
@@ -1767,7 +1847,7 @@ footer {
   </div>
 </section>
 
-<!-- 10. 공유 -->
+<!-- 11. 공유 -->
 <section id="share" class="section reveal">
   <span class="section-label">Share</span>
   <div class="section-title">청첩장 공유하기</div>
@@ -1779,12 +1859,6 @@ footer {
 </section>
 
 <footer>H &amp; K · 2025</footer>
-
-<!-- 하단 고정 버튼 -->
-<div id="bottom-bar">
-  <button class="btn btn-outline" onclick="shareKakao()">💬 카카오톡 공유</button>
-  <button class="btn btn-gold" onclick="openAttendModal()">✉ 참석여부 전달</button>
-</div>
 
 <!-- ================================================
      JavaScript
@@ -1861,9 +1935,9 @@ function onSettingsLoaded(data) {
 
   const gn = data.groom_name || '신랑';
   const bn = data.bride_name  || '신부';
-  setText('hero-en-names', `${toEn(gn)} & ${toEn(bn)}`);
+
+  // ── 히어로 오버레이 텍스트 ──────────────────
   setText('hero-kr-names', `${gn} · ${bn}`);
-  setAttr('hero-date', null, formatDateSimple(data.wedding_date));
 
   // 히어로 이미지 (구글드라이브 URL 지원)
   if (data.hero_image) {
@@ -1876,12 +1950,24 @@ function onSettingsLoaded(data) {
 
   const dateObj = parseWeddingDate(data.wedding_date);
 
-  // 6/21 형식 강조 표시
   if (dateObj) {
+    // 중앙 큰 숫자: 월 / 일
+    setText('hero-month-num', String(dateObj.monthNum));
+    setText('hero-day-num',   String(parseInt(dateObj.day)));
+
+    // 상단 요일 + 시간 (영문) — Saturday  2:00 pm 형식
+    const dowEn  = dateObj.dowEn.charAt(0).toUpperCase() +
+                   dateObj.dowEn.slice(1).toLowerCase(); // Saturday
+    const timeRaw = data.wedding_time || '';
+    // "오후 2시" → "2:00 pm" 변환 시도
+    const timeEn = convertTimeToEn(timeRaw);
+    setText('hero-dow-time', `${dowEn}  ${timeEn}`);
+
+    // Wedding Day 섹션용
     setText('w-date-slash', `${dateObj.monthNum}/${dateObj.day}`);
   }
 
-  // 토요일 오후 2시 형식
+  // 토요일 오후 2시 형식 (Wedding Day 섹션)
   const dowKr = dateObj
     ? ['일','월','화','수','목','금','토'][new Date(dateObj.yearNum, dateObj.monthNum-1, parseInt(dateObj.day)).getDay()] + '요일'
     : '';
@@ -2368,6 +2454,22 @@ function copyToClipboard(text, successMsg) {
     showToast(successMsg);
   }
 }
+// "오후 2시" / "오전 11시 30분" → "2:00 pm" / "11:30 am"
+function convertTimeToEn(str) {
+  if (!str) return '';
+  const isPm  = str.includes('오후');
+  const isAm  = str.includes('오전');
+  const nums  = str.match(/\d+/g) || [];
+  if (!nums.length) return str;
+  let h = parseInt(nums[0]);
+  const m = nums[1] ? nums[1].padStart(2,'0') : '00';
+  if (isPm && h < 12) h += 12;
+  if (isAm && h === 12) h = 0;
+  const ampm = h >= 12 ? 'pm' : 'am';
+  const h12  = h % 12 || 12;
+  return `${h12}:${m} ${ampm}`;
+}
+
 function toEn(name) {
   const map={'홍':'HONG','길':'GIL','동':'DONG','김':'KIM','영':'YOUNG','희':'HEE',
     '이':'LEE','박':'PARK','최':'CHOI','정':'JUNG','강':'KANG','조':'CHO',

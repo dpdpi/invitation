@@ -168,7 +168,7 @@ body {
 
 .loading-monogram {
   font-family: var(--font-serif-en);
-  font-size: 58px;
+  font-size: 40px;
   font-weight: 400;
   color: var(--gold-dark);
   letter-spacing: 0.08em;
@@ -216,6 +216,20 @@ body {
 }
 
 @keyframes hero-zoom { from{transform:scale(1.04)} to{transform:scale(1)} }
+
+/* ============================================
+   꽃잎 APNG 오버레이
+   ============================================ */
+#petal-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 2;
+  pointer-events: none;
+}
 
 /* ============================================
    히어로 오버레이 텍스트 (참고 이미지 스타일)
@@ -351,7 +365,7 @@ body {
   background: #fff;
   border: 1px solid var(--divider);
   border-radius: 5px;
-  padding: 36px 28px;
+  padding: 17px 28px;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
@@ -363,7 +377,7 @@ body {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 18px 0;
+  padding: 10px 0;
   gap: 8px;
 }
 .couple-row + .couple-row {
@@ -1160,7 +1174,7 @@ body {
 .guestbook-item {
   background: #fff;
   border: 1px solid var(--divider);
-  border-radius: 22px;
+  border-radius: 5px;
   padding: 22px;
   animation: fade-up 0.4s ease;
   box-shadow: 0 8px 22px rgba(0,0,0,0.04);
@@ -1168,12 +1182,12 @@ body {
 .guestbook-item-header {
   display: flex; justify-content: space-between; align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 .guestbook-author {
   font-family: var(--font-sans);
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text-dark);
 }
 .guestbook-date {
@@ -1533,7 +1547,7 @@ footer {
 <!-- 1. HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
-
+  <img id="petal-overlay" src="./images/effect_cherryblossom.png" alt="" aria-hidden="true">
   <div class="hero-content">
     <!-- 상단: Date 라벨 + 요일·시간 -->
     <div class="hero-top">
@@ -1824,8 +1838,7 @@ footer {
   <div class="section-title">청첩장 공유하기</div>
   <div class="divider"><div class="divider-diamond"></div></div>
   <div class="share-btns">
-    <button class="btn btn-gold" onclick="shareKakao()">💬 카카오톡으로 공유하기</button>
-    <button class="btn btn-outline" onclick="copyLink()">🔗 청첩장 주소 복사하기</button>
+    <button class="btn btn-gold" onclick="copyLink()">🔗 청첩장 주소 복사하기</button>
   </div>
 </section>
 
@@ -2349,23 +2362,6 @@ function openMap() {
 }
 function copyAddress() {
   copyToClipboard(document.getElementById('w-address').textContent, '주소가 복사되었습니다');
-}
-function shareKakao() {
-  if (typeof Kakao !== 'undefined' && Kakao.isInitialized && Kakao.isInitialized()) {
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title      : settings.kakao_share_title || '결혼합니다',
-        description: settings.kakao_share_desc  || '',
-        imageUrl   : document.querySelector('meta[property="og:image"]')?.content ||
-                     'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
-        link: { mobileWebUrl: location.href, webUrl: location.href }
-      },
-      buttons: [{ title: '청첩장 보기', link: { mobileWebUrl: location.href, webUrl: location.href } }]
-    });
-  } else {
-    copyLink();
-  }
 }
 function copyLink() { copyToClipboard(location.href, '청첩장 주소가 복사되었습니다'); }
 
